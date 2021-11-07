@@ -61,6 +61,6 @@ def analyse(image, use_max_area=0):
 
     print('calc max area')
 
-    return damage_area > 5, {
+    return damage_area > 3, {
         'damage': f'{damage_area}%'
     }
