@@ -46,7 +46,6 @@ class API(APIView):
                 }, status=400
             )
 
-        print('analysing image')
         damage_detected, image_details = analyse(image, use_max_area)
 
         response = {

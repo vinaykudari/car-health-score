@@ -23,44 +23,35 @@ predictor = DefaultPredictor(cfg)
 
 
 def analyse(image, use_max_area=0):
+    print(f'use_max_area: {use_max_area}')
     outputs = predictor(image)
     predictions = outputs['instances']
     boxes = predictions.pred_boxes if predictions.has("pred_boxes") else None
     areas = []
     max_damage_area = float('-inf')
+    max_box = None
     total_damage_area = 0
-    max_idx = None
-
-    print('got predictions')
+    all_boxes = []
 
     for i in range(len(boxes)):
         area = boxes[i].area()
         if area > max_damage_area:
-            max_idx = i
             max_damage_area = area
+            max_box = boxes[i]
         total_damage_area += area
         areas.append(area)
+        all_boxes.append(boxes[i].tensor.numpy().astype(int).tolist())
 
-    print('got max dents')
-
-    # cv2.rectangle(
-    #     image,
-    #     tuple(boxes[max_idx].tensor[0][0:2].int().numpy()),
-    #     tuple(boxes[max_idx].tensor[0][2:].int().numpy()),
-    #     (0, 255, 0),
-    #     2,
-    # )
-
-    if use_max_area is True:
+    if use_max_area == '1':
         damage_area = max_damage_area
+        all_boxes = [max_box.tensor.numpy().astype(int).tolist()]
     else:
         damage_area = total_damage_area
 
     image_area = image.shape[0] * image.shape[1]
-    damage_area = (torch.div(damage_area, image_area) * 100).item()
+    damage = (torch.div(damage_area, image_area) * 100).item()
 
-    print('calc max area')
-
-    return damage_area > 3, {
-        'damage': f'{damage_area}%'
+    return damage > 3, {
+        'damage': f'{damage}%',
+        'boxes': all_boxes,
     }
