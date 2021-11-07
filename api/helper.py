@@ -43,7 +43,7 @@ def analyse(image, use_max_area=0):
 
     if use_max_area == '1':
         damage_area = max_damage_area
-        all_boxes = [max_box.tensor.numpy().astype(int).tolist()]
+        all_boxes = max_box.tensor.numpy().astype(int).tolist()
     else:
         damage_area = total_damage_area
 
