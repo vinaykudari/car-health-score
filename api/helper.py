@@ -23,7 +23,6 @@ predictor = DefaultPredictor(cfg)
 
 
 def analyse(image, use_max_area=0):
-    print(f'use_max_area: {use_max_area}')
     outputs = predictor(image)
     predictions = outputs['instances']
     boxes = predictions.pred_boxes if predictions.has("pred_boxes") else None
@@ -40,7 +39,7 @@ def analyse(image, use_max_area=0):
             max_box = boxes[i]
         total_damage_area += area
         areas.append(area)
-        all_boxes.append(boxes[i].tensor.numpy().astype(int).tolist())
+        all_boxes += boxes[i].tensor.numpy().astype(int).tolist()
 
     if use_max_area == '1':
         damage_area = max_damage_area
