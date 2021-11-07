@@ -31,6 +31,8 @@ def analyse(image, use_max_area=0):
     total_damage_area = 0
     max_idx = None
 
+    print('got predictions')
+
     for i in range(len(boxes)):
         area = boxes[i].area()
         if area > max_damage_area:
@@ -38,6 +40,8 @@ def analyse(image, use_max_area=0):
             max_damage_area = area
         total_damage_area += area
         areas.append(area)
+
+    print('got max dents')
 
     # cv2.rectangle(
     #     image,
@@ -54,6 +58,8 @@ def analyse(image, use_max_area=0):
 
     image_area = image.shape[0] * image.shape[1]
     damage_area = (torch.div(damage_area, image_area) * 100).item()
+
+    print('calc max area')
 
     return damage_area > 5, {
         'damage': f'{damage_area}%'
