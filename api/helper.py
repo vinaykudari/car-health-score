@@ -1,5 +1,5 @@
 import cv2
-
+import torch
 from detectron2.engine import DefaultPredictor
 from detectron2 import model_zoo
 from detectron2.config import get_cfg
@@ -53,8 +53,8 @@ def analyse(image, use_max_area=0):
         damage_area = total_damage_area
 
     image_area = image.shape[0] * image.shape[1]
-    damage_area = ((damage_area / image_area) * 100).item()
+    damage_area = (torch.div(damage_area, image_area) * 100).item()
 
-    return damage_area > 0, {
+    return damage_area > 5, {
         'damage': f'{damage_area}%'
     }

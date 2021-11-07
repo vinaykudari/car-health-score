@@ -18,7 +18,6 @@ class API(APIView):
     def post(self, request):
         image = request.FILES.get('image')
         use_max_area = request.POST.get('use_max_area')
-        print(use_max_area)
 
         if not image:
             return JsonResponse(
@@ -32,6 +31,13 @@ class API(APIView):
                 np.fromstring(image.read(), np.uint8),
                 cv2.IMREAD_UNCHANGED,
             )
+
+            scale_percent = 50
+            width = int(image.shape[1] * scale_percent / 100)
+            height = int(image.shape[0] * scale_percent / 100)
+            dim = (width, height)
+            image = cv2.resize(image, dim, interpolation=cv2.INTER_AREA)
+
         except Exception as e:
             print(e)
             return JsonResponse(
