@@ -1,6 +1,8 @@
 from PIL import Image
 from django.http import JsonResponse
 from rest_framework.views import APIView
+import cv2
+import numpy as np
 
 from api.helper import analyse
 
@@ -15,6 +17,9 @@ class API(APIView):
 
     def post(self, request):
         image = request.FILES.get('image')
+        use_max_area = request.POST.get('use_max_area')
+        print(use_max_area)
+
         if not image:
             return JsonResponse(
                 {
@@ -23,15 +28,19 @@ class API(APIView):
             )
 
         try:
-            Image.open(image)
+            image = cv2.imdecode(
+                np.fromstring(image.read(), np.uint8),
+                cv2.IMREAD_UNCHANGED,
+            )
         except Exception as e:
+            print(e)
             return JsonResponse(
                 {
                     "error": "File provided is either corrupt or not a valid Image"
                 }, status=400
             )
 
-        damage_detected, image_details = analyse(image)
+        damage_detected, image_details = analyse(image, use_max_area)
 
         response = {
             'damage_detected': damage_detected,
