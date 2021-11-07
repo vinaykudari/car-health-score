@@ -32,11 +32,13 @@ class API(APIView):
                 cv2.IMREAD_UNCHANGED,
             )
 
-            scale_percent = 50
-            width = int(image.shape[1] * scale_percent / 100)
-            height = int(image.shape[0] * scale_percent / 100)
-            dim = (width, height)
-            image = cv2.resize(image, dim, interpolation=cv2.INTER_AREA)
+            # scale down for performance
+
+            # scale_percent = 50
+            # width = int(image.shape[1] * scale_percent / 100)
+            # height = int(image.shape[0] * scale_percent / 100)
+            # dim = (width, height)
+            # image = cv2.resize(image, dim, interpolation=cv2.INTER_AREA)
 
         except Exception as e:
             print(e)
