@@ -39,13 +39,13 @@ def analyse(image, use_max_area=0):
         total_damage_area += area
         areas.append(area)
 
-    cv2.rectangle(
-        image,
-        tuple(boxes[max_idx].tensor[0][0:2].int().numpy()),
-        tuple(boxes[max_idx].tensor[0][2:].int().numpy()),
-        (0, 255, 0),
-        2,
-    )
+    # cv2.rectangle(
+    #     image,
+    #     tuple(boxes[max_idx].tensor[0][0:2].int().numpy()),
+    #     tuple(boxes[max_idx].tensor[0][2:].int().numpy()),
+    #     (0, 255, 0),
+    #     2,
+    # )
 
     if use_max_area is True:
         damage_area = max_damage_area
