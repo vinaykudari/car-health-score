@@ -51,6 +51,6 @@ def analyse(image, use_max_area=0):
     damage = (torch.div(damage_area, image_area) * 100).item()
 
     return damage > 2, {
-        'damage': f'{damage}%',
+        'damage': damage,
         'boxes': all_boxes,
     }
